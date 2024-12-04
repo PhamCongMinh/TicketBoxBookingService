@@ -132,4 +132,5 @@ volumes:
 
 networks:
   ticket-box:
+    name: ticket-box
 
