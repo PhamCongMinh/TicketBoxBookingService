@@ -21,7 +21,7 @@ public class TicketType extends BaseModel {
 
     private String description;
 
-    private String amount;
+    private Integer amount;
 
     @ManyToOne()
     @JoinColumn(name = "event_id")

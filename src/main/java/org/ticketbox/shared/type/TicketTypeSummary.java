@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class TicketTypeSummary {
     private long ticketTypeId;
     private long eventId;
-    private String amount;
+    private Integer amount;
 }

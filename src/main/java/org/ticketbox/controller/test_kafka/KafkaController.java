@@ -15,7 +15,7 @@ public class KafkaController {
 
     @GetMapping("/send")
     public String sendMessage(@RequestParam String topic) {
-        TicketTypeSummary ticketTypeSummary =  TicketTypeSummary.builder().ticketTypeId(1).eventId(1).amount("2").build();
+        TicketTypeSummary ticketTypeSummary =  TicketTypeSummary.builder().ticketTypeId(1).eventId(1).amount(2).build();
         kafkaProducerService.sendMessage(topic, ticketTypeSummary);
         return "Message sent to topic: " + topic;
     }

@@ -14,7 +14,7 @@ public class CreateTicketTypeDto {
 
     private String description;
 
-    private String amount;
+    private Integer amount;
 
     private Integer eventId;
 }
