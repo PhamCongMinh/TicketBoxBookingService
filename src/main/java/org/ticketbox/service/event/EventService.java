@@ -1,5 +1,6 @@
 package org.ticketbox.service.event;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.ticketbox.database.model.Event;
@@ -27,6 +28,7 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    @Transactional()
     public Event createEvent(CreateEventDto eventDto) {
         Organizer organizer = organizerRepository.getOrganizerById(eventDto.getOrganizerId())
                 .orElseThrow(() -> new BadRequestException(ErrorCodeConstant.ORGANIZER_NOT_EXIST));
@@ -40,7 +42,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public void updateVenueFromDto(Venue venue, CreateVenueDto venueDto) {
+    private void updateVenueFromDto(Venue venue, CreateVenueDto venueDto) {
         venue.setName(venueDto.getName());
         venue.setAddress(venueDto.getAddress());
         venue.setCity(venueDto.getCity());
@@ -48,7 +50,7 @@ public class EventService {
         venue.setSeatMapUrl(venueDto.getSeatMapUrl());
     }
 
-    public void updateEventFromDto(Event event, CreateEventDto eventDto, Venue newVenue, Organizer organizer) {
+    private void updateEventFromDto(Event event, CreateEventDto eventDto, Venue newVenue, Organizer organizer) {
         event.setName(eventDto.getName());
         event.setBackgroundImageUrl(eventDto.getBackgroundImageUrl());
         event.setStartTime(eventDto.getStartTime());
@@ -59,6 +61,7 @@ public class EventService {
         event.setOrganizer(organizer);
     }
 
+    @Transactional()
     public Event editEvent(Integer id, EditEventDto eventDto) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(ErrorCodeConstant.EVENT_NOT_EXIST));
@@ -82,6 +85,7 @@ public class EventService {
                 .orElseThrow(() -> new BadRequestException(ErrorCodeConstant.EVENT_NOT_EXIST));
     }
 
+    @Transactional()
     public void deleteEventById(Integer id) {
         eventRepository.deleteById(id);
     }

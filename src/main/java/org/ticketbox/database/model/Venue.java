@@ -16,7 +16,7 @@ public class Venue extends BaseModel {
     private String name;
     private String address;
     private String city;
-    private Long capacity;
+    private long capacity;
     private String seatMapUrl;
 
     @OneToOne(mappedBy = "venue")

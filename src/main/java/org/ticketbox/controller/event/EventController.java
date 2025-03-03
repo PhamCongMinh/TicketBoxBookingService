@@ -1,5 +1,8 @@
 package org.ticketbox.controller.event;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.ticketbox.database.model.Event;
@@ -12,11 +15,14 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/events")
+@Tag(name= "Event", description = "Event API")
 public class EventController {
     @Autowired
     private EventService eventService;
 
     @GetMapping
+    @Operation(summary = "Get all events", description = "Get all events")
+    @ApiResponse(responseCode = "200", description = "OK")
     public BaseResponse<List<Event>> getAllEvent() {
         return new BaseResponse<List<Event>>(eventService.getAllEvent());
     }
