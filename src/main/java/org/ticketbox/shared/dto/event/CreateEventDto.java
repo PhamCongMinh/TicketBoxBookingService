@@ -11,18 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class CreateEventDto {
     private String name;
-
     private String backgroundImageUrl;
-
     private Date startTime;
-
     private Date endTime;
-
-    private String location;
-
     private String description;
-
     private String status;
-
     private Integer organizerId;
+    private CreateVenueDto venue;
 }

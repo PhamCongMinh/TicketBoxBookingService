@@ -6,6 +6,7 @@ import org.ticketbox.database.model.Event;
 import org.ticketbox.service.event.EventService;
 import org.ticketbox.shared.base.BaseResponse;
 import org.ticketbox.shared.dto.event.CreateEventDto;
+import org.ticketbox.shared.dto.event.EditEventDto;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public BaseResponse<Event> editEvent(@PathVariable Integer id, @RequestBody CreateEventDto eventDto) {
+    public BaseResponse<Event> editEvent(@PathVariable Integer id, @RequestBody EditEventDto eventDto) {
         return new BaseResponse<Event>(eventService.editEvent(id, eventDto));
     }
 

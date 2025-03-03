@@ -2,7 +2,6 @@ package org.ticketbox.database.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,17 +17,10 @@ import java.util.List;
 @Builder
 public class Event extends BaseModel {
     private String name;
-
     private String backgroundImageUrl;
-
     private Date startTime;
-
     private Date endTime;
-
-    private String location;
-
     private String description;
-
     private String status;
 
     @ManyToOne()
@@ -36,6 +28,8 @@ public class Event extends BaseModel {
     @JsonIgnoreProperties("events")
     private Organizer organizer;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TicketType> ticketTypes;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "venue_id", referencedColumnName = "id")
+    @JsonBackReference
+    private Venue venue;
 }

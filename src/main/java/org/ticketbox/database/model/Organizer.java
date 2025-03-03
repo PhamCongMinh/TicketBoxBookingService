@@ -1,7 +1,9 @@
 package org.ticketbox.database.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,9 +19,7 @@ import java.util.List;
 @Table(name = "organizers")
 public class Organizer extends BaseModel {
     private String name;
-
     private String description;
-
     private String backgroundImageUrl;
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL, orphanRemoval = true)

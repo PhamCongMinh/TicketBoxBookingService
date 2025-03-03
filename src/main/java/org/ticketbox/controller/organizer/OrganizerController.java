@@ -27,7 +27,6 @@ public class OrganizerController {
         return new BaseResponse<Organizer>(organizerService.editOrganizer(id, organizer));
     }
 
-
     @DeleteMapping("/{id}")
     public void deleteTicketTypeById(@PathVariable Integer id) {
         organizerService.deleteOrganizerById(id);
