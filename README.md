@@ -1,4 +1,4 @@
-# TicketBox Event Service
+# TicketBox Booking Service
 
 ## General information <hr>
 

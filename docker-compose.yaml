@@ -74,27 +74,27 @@ services:
 #      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'PLAINTEXT://kafka1:19092,PLAINTEXT://kafka2:19093,PLAINTEXT://kafka3:19094'
 #      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
-  app:
-    image: openjdk:17-jdk-slim
-    container_name: ${SPRING_APPLICATION_NAME}
-    ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
-    env_file:
-      - .env
-    volumes:
-      - ./target/${JAR_FILE}:/app/${JAR_FILE}
-    restart: always
-    working_dir: /app
-    command: [ "java", "-jar", "${JAR_FILE}" ]
-    depends_on:
-      - db
-      - zoo1
-      - kafka1
-      - kafka-ui
-      - redis
-#      - kafka-schema-registry
-    networks:
-      - ticket-box
+#  app:
+#    image: openjdk:17-jdk-slim
+#    container_name: ${SPRING_APPLICATION_NAME}
+#    ports:
+#      - "${SERVER_PORT}:${SERVER_PORT}"
+#    env_file:
+#      - .env
+#    volumes:
+#      - ./target/${JAR_FILE}:/app/${JAR_FILE}
+#    restart: always
+#    working_dir: /app
+#    command: [ "java", "-jar", "${JAR_FILE}" ]
+#    depends_on:
+#      - db
+#      - zoo1
+#      - kafka1
+#      - kafka-ui
+#      - redis
+##      - kafka-schema-registry
+#    networks:
+#      - ticket-box
 
   db:
     image: postgres:15.3
