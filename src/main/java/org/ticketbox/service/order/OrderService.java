@@ -37,8 +37,12 @@ public class OrderService {
         if (!isEnoughTicket)
             throw new BadRequestException(ErrorCodeConstant.NOT_ENOUGH_TICKETS);
 
+        // If create new order fail, release locked tickets in redis
+        Order newOrder = saveOrder(order, ticketTypes);
+        reserveTicketService.saveExpiredTimeForReserveTicketOrder(newOrder);
+
         // Todo: return pending order to user start payment
-        return saveOrder(order, ticketTypes);
+        return newOrder;
     }
 
     public List<TicketType> checkTicketTypesBeforeCreateNewOrder(CreateOrderDto order) {

@@ -1,8 +1,10 @@
 package org.ticketbox.service.reserve_ticket;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.ticketbox.database.model.Order;
+import org.ticketbox.database.repository.OrderRepository;
 import org.ticketbox.dto.order.CreateOrderDto;
-import org.ticketbox.dto.order.CreateOrderItemDto;
 import org.ticketbox.service.redis.RedisService;
 
 import java.io.IOException;
@@ -11,19 +13,24 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ReserveTicketService {
     private final RedisService redisService;
-    private final long RESERVE_TICKET_EXPIRATION = 600;
+    private final long RESERVE_TICKET_EXPIRATION = 60;
     private final String reserveTicketLuaScript;
+    private final String releaseTicketLuaScript;
+    private final OrderRepository orderRepository;
 
-    public ReserveTicketService(RedisService redisService) throws IOException {
+    public ReserveTicketService(RedisService redisService, OrderRepository orderRepository) throws IOException {
         this.redisService = redisService;
-        this.reserveTicketLuaScript = loadReserveTicketLuaScript("lua/reserve_ticket.lua");
+        this.reserveTicketLuaScript = loadLuaScript("lua/reserve_ticket.lua");
+        this.orderRepository = orderRepository;
+        this.releaseTicketLuaScript = loadLuaScript("lua/release_ticket.lua");
     }
 
-    private String loadReserveTicketLuaScript(String path) throws IOException {
+    private String loadLuaScript(String path) throws IOException {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path)) {
             if (inputStream == null) {
                 throw new IOException("Reserve Ticket Lua Script not found" + path);
@@ -46,7 +53,24 @@ public class ReserveTicketService {
         return redisService.executeLuaScript(reserveTicketLuaScript, Boolean.class, keys, args.toArray());
     }
 
-    public void releaseTicket() {
+    public void saveExpiredTimeForReserveTicketOrder(Order order) {
+        redisService.setValue("reserve_ticket:" + order.getId(), order.getId(), RESERVE_TICKET_EXPIRATION, TimeUnit.SECONDS);
+    }
 
+    @Transactional
+    public void releaseTicket(long orderId) {
+        // Release the reserved tickets in Redis
+        System.out.println("Reserve Ticket released: " + orderId);
+        // If failed, send notification email for check and save necessary information to database
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        List<String> keys = new ArrayList<>();
+        List<Long> args = new ArrayList<>();
+
+        order.getOrderItems().forEach(orderItem -> {
+            args.add(orderItem.getTicketType().getId());
+            args.add(orderItem.getQuantity());
+        });
+
+        redisService.executeLuaScript(releaseTicketLuaScript, Boolean.class, keys, args.toArray());
     }
 }
