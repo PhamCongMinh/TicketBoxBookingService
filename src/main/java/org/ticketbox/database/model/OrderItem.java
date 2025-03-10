@@ -18,7 +18,7 @@ public class OrderItem extends BaseModel {
     // FIXED, QUANTITY
     private String inventoryMethod;
     private long quantity;
-    private long unitPrice;
+//    private long unitPrice;
 
     @ManyToOne()
     @JoinColumn(name = "order_id")
@@ -29,4 +29,9 @@ public class OrderItem extends BaseModel {
     @JoinColumn(name = "ticket_id")
     @JsonIgnoreProperties("orderItems")
     private Ticket ticket;
+
+    @ManyToOne()
+    @JoinColumn(name = "ticket_type_id")
+    @JsonIgnoreProperties("orderItems")
+    private TicketType ticketType;
 }

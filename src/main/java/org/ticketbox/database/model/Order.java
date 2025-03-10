@@ -16,7 +16,7 @@ public class Order extends BaseModel {
     private long eventId;
     private long userId;
     private long totalAmount;
-    // PENDING, CONFIRMED, CANCELED, REFUNDED
+    // INIT, CONFIRMED, CANCELED, REFUNDED
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
