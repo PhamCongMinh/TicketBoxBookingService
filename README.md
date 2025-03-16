@@ -2,11 +2,10 @@
 
 ## General information <hr>
 
-This project includes: APIs and Jobs of the NFT Ticket backend
-
+This project is a ticket booking service that allows users to book tickets for various events. 
 
 ## Requirement <hr>
-- requires Java version 21
+- requires Java version 17
 - docker
 
 ## Set up <hr>
